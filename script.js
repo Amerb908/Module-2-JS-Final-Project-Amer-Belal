@@ -1,175 +1,110 @@
-const lengthInput = document.getElementById('length');
-const uppercaseInput = document.getElementById('uppercase');
-const numbersInput = document.getElementById('numbers');
-const specialInput = document.getElementById('special');
-const greekInput = document.getElementById('greek'); // Checkbox for Greek words
+// Elements
 const generateButton = document.getElementById('generate');
 const passwordInput = document.getElementById('password');
 const copyButton = document.getElementById('copy');
-const strengthBar = document.getElementById('strength-bar');
-const strengthText = document.getElementById('strength-text');
-const scoreBreakdown = document.getElementById('score-breakdown');
+const saveButton = document.getElementById('save');
+const historyButton = document.getElementById('history-btn');
 
-// Array of Greek words
-const greekWords = [
-    "αγάπη", "ελπίδα", "φως", "ψυχή", "αλήθεια", "χρόνος", "γνώση",
-    "κλέος", "οδύσσεια", "σοφία", "δάκρυα", "ισχύς", "πίστη", "δόξα"
-];
-
+// Event Listeners
 generateButton.addEventListener('click', () => {
     generatePassword();
     updateStrengthMeter(passwordInput.value);
 });
 
 copyButton.addEventListener('click', copyPassword);
+saveButton.addEventListener('click', savePasswordToHistory);
 
+historyButton.addEventListener('click', () => {
+    window.location.href = 'history.html';
+});
+
+// Password Generation Function
 function generatePassword() {
-    const length = parseInt(lengthInput.value);
-    const uppercase = uppercaseInput.checked;
-    const numbers = numbersInput.checked;
-    const special = specialInput.checked;
-    const includeGreek = greekInput.checked;
+    const lengthInput = document.getElementById('length').value;
+    const uppercaseInput = document.getElementById('uppercase').checked;
+    const numbersInput = document.getElementById('numbers').checked;
+    const specialInput = document.getElementById('special').checked;
+    const greekInput = document.getElementById('greek').checked;
+
+    const length = parseInt(lengthInput);
     let characters = 'abcdefghijklmnopqrstuvwxyz';
     let password = '';
 
-    if (uppercase) {
-        characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    }
-    if (numbers) {
-        characters += '0123456789';
-    }
-    if (special) {
-        characters += '!@#$%^&*()_+-={}:<>?,./';
-    }
+    // Add character sets based on options selected
+    if (uppercaseInput) characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (numbersInput) characters += '0123456789';
+    if (specialInput) characters += '!@#$%^&*()_+-={}:<>?,./';
+    if (greekInput) characters += 'αβγδεζηθικλμνξοπρστυφχψω';
 
-    // Basic random character generation
+    // Generate password from available character sets
     for (let i = 0; i < length; i++) {
         password += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-
-    // Ensure password includes at least one of each selected character type
-    if (uppercase && !password.match(/[A-Z]/)) {
-        password = password.slice(0, -1) + getRandomCharacter('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-    }
-    if (numbers && !password.match(/[0-9]/)) {
-        password = password.slice(0, -1) + getRandomCharacter('0123456789');
-    }
-    if (special && !password.match(/[^a-zA-Z0-9]/)) {
-        password = password.slice(0, -1) + getRandomCharacter('!@#$%^&*()_+-={}:<>?,./');
-    }
-
-    // If Greek words are enabled, add a Greek word randomly into the password
-    if (includeGreek) {
-        const greekWord = greekWords[Math.floor(Math.random() * greekWords.length)];
-        const insertIndex = Math.floor(Math.random() * (password.length + 1));
-        password = password.slice(0, insertIndex) + greekWord + password.slice(insertIndex);
     }
 
     passwordInput.value = password;
 }
 
-function getRandomCharacter(characters) {
-    return characters.charAt(Math.floor(Math.random() * characters.length));
-}
-
+// Copy Password Function
 function copyPassword() {
     passwordInput.select();
     document.execCommand('copy');
+    alert('Password copied to clipboard!');
 }
 
-function calculateStrength(password) {
-    let strength = 0;
-    let breakdown = []; // For the score breakdown
-    
-    // Length points
-    if (password.length >= 8) { 
-        strength += 10; 
-        console.log("+10 for minimum length of 8 characters");
-    } 
-    if (password.length >= 12) {
-        strength += 10;
-        console.log("+10 for length of 12 characters");
-    }
-    if (password.length >= 16) {
-        strength += 10;
-        console.log("+10 for length of 16 characters");
-    }
-    if (password.length >= 20) {
-        strength += 10;
-        console.log("+10 for length of 20+ characters");
-    }
+// Save Password to Local Storage Function
+function savePasswordToHistory() {
+    const password = passwordInput.value;
 
-    // Character variety
-    if (/[a-z]/.test(password)) {
-        strength += 5;
-        console.log("+5 for using lowercase letters");
-    }
-    if (/[A-Z]/.test(password)) {
-        strength += 10;
-        console.log("+10 for using uppercase letters");
-    }
-    if (/[0-9]/.test(password)) {
-        strength += 10;
-        console.log("+10 for using numbers");
-    }
-    if (/[^a-zA-Z0-9]/.test(password)) {
-        strength += 15;
-        console.log("+15 for using special characters");
-    }
+    if (password) {
+        let history = JSON.parse(localStorage.getItem('passwordHistory')) || [];
 
-    // Penalize repetition
-    if (/([a-zA-Z0-9])\1\1/.test(password)) {
-        strength -= 10;
-        console.log("-10 for repeated characters");
+        // Add the new password to the history with a timestamp
+        history.push({ password, date: new Date().toLocaleString() });
+
+        // Save updated history back to localStorage
+        localStorage.setItem('passwordHistory', JSON.stringify(history));
+
+        alert('Password saved successfully!');
+    } else {
+        alert('No password to save!');
     }
-
-    // Penalize sequences (e.g., 1234, abcd)
-    if (password.match(/(012|123|234|345|456|567|678|789|890|abc|bcd|cde|def|efg|fgh)/)) {
-        strength -= 15;
-        console.log("-15 for sequential characters");
-    }
-
-    // Penalize common keyboard patterns
-    if (/qwerty|asdf|zxcv|12345|password|admin/.test(password.toLowerCase())) {
-        strength -= 20;
-        console.log("-20 for common keyboard patterns or weak passwords");
-    }
-
-    // Cap the score between 0 and 100
-    if (strength > 100) strength = 100;
-    if (strength < 0) strength = 0;
-
-    return { strength, breakdown };
 }
 
+// Password Strength Meter Function
 function updateStrengthMeter(password) {
-    const { strength, breakdown } = calculateStrength(password);
+    const strengthBar = document.getElementById('strength-bar');
+    const strengthLabel = document.getElementById('strength-label');
+    
+    let strength = 0;
 
-    // Update the strength bar based on the score
-    strengthBar.style.width = strength + '%';
-    if (strength <= 30) {
+    // Increase strength based on password composition
+    if (/[A-Z]/.test(password)) strength++;   // Uppercase letters
+    if (/[0-9]/.test(password)) strength++;   // Numbers
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;  // Special characters
+    if (password.length >= 12) strength++;  // Minimum length of 12 characters
+
+    // Update strength meter based on the strength score
+    if (strength === 0) {
+        strengthBar.style.width = '0%';
         strengthBar.style.backgroundColor = 'red';
-        strengthText.textContent = 'Very Weak';
-    } else if (strength <= 60) {
+        strengthLabel.textContent = 'Very Weak';
+    } else if (strength === 1) {
+        strengthBar.style.width = '25%';
+        strengthBar.style.backgroundColor = 'red';
+        strengthLabel.textContent = 'Weak';
+    } else if (strength === 2) {
+        strengthBar.style.width = '50%';
         strengthBar.style.backgroundColor = 'yellow';
-        strengthText.textContent = 'Moderate';
-    } else if (strength <= 80) {
-        strengthBar.style.backgroundColor = 'lightgreen';
-        strengthText.textContent = 'Strong';
-    } else if (strength <= 85) {
+        strengthLabel.textContent = 'Medium';
+    } else if (strength === 3) {
+        strengthBar.style.width = '75%';
         strengthBar.style.backgroundColor = 'green';
-        strengthText.textContent = 'Very Strong';
+        strengthLabel.textContent = 'Strong';
+    } else if (strength === 4) {
+        strengthBar.style.width = '100%';
+        strengthBar.style.backgroundColor = 'green';
+        strengthLabel.textContent = 'Very Strong';
     }
-
-    // Clear previous breakdown
-    scoreBreakdown.innerHTML = '';
-
-    // Add new breakdown
-    breakdown.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item;
-        scoreBreakdown.appendChild(li);
-    });
 }
 
 let secretClicks = 0;
