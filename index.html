@@ -13,20 +13,27 @@
         </div>
 		<h1>Password Generator</h1>
 		<div class="options">
-			<label for="length">Length:</label>
+			<label for="length">- Length:</label>
 			<input type="number" id="length" value="12" min="8" max="128"><br>
-			<label for="uppercase">Uppercase:</label>
-			<input type="checkbox" id="uppercase" checked><br>
-			<label for="numbers">Numbers:</label>
-			<input type="checkbox" id="numbers" checked><br>
-			<label for="special">Special Characters:</label>
-			<input type="checkbox" id="special" checked><br>
+			<label for="uppercase">- Uppercase:</label>
+			<input type="checkbox" id="uppercase"><br>
+			<label for="numbers">- Numbers:</label>
+			<input type="checkbox" id="numbers" ><br>
+			<label for="special">- Special Characters:</label>
+			<input type="checkbox" id="special" ><br>
+            <label for="greek">- Greek Words:</label>
+            <input type="checkbox" id="greek"><br>
 		</div>
 		<button id="generate">Generate Password</button>
 		<div class="password-container">
 			<input type="text" id="password" readonly>
 			<button id="copy">Copy</button>
 		</div>
+        <div class="strength-meter">
+            <div id="strength-bar"></div>
+            <p id="strength-text"></p>
+            
+        </div>
         
 	</div>
 	<script src="script.js"></script>
