@@ -1,18 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Sketch</title>
-
-    <link rel="stylesheet" type="text/css" href="style.css">
-
-    <script src="libraries/p5.min.js"></script>
-    <script src="libraries/p5.sound.min.js"></script>
-  </head>
-
-  <body>
-    <script src="sketch.js"></script>
-  </body>
+<html>
+<head>
+	<title>Password Generator</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<div class="container">
+        <div class="secret-button" id="secret-button">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 14c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
+            </svg>
+        </div>
+		<h1>Password Generator</h1>
+		<div class="options">
+			<label for="length">Length:</label>
+			<input type="number" id="length" value="12" min="8" max="128"><br>
+			<label for="uppercase">Uppercase:</label>
+			<input type="checkbox" id="uppercase" checked><br>
+			<label for="numbers">Numbers:</label>
+			<input type="checkbox" id="numbers" checked><br>
+			<label for="special">Special Characters:</label>
+			<input type="checkbox" id="special" checked><br>
+		</div>
+		<button id="generate">Generate Password</button>
+		<div class="password-container">
+			<input type="text" id="password" readonly>
+			<button id="copy">Copy</button>
+		</div>
+        
+	</div>
+	<script src="script.js"></script>
+</body>
 </html>

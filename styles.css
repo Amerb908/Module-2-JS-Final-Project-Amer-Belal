@@ -1,0 +1,87 @@
+body {
+	font-family: Arial, sans-serif;
+	background-color: #ffb2b2;
+}
+
+.container {
+	width: 300px;
+	margin: 50px auto;
+	padding: 45px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	text-align: center;
+}
+
+.options {
+	margin-bottom: 20px;
+}
+
+label {
+	margin-right: 10px;
+}
+
+input[type="number"] {
+	width: 50px;
+}
+
+input[type="checkbox"] {
+	margin-right: 10px;
+}
+
+button {
+	background-color: #4CAF50;
+	color: #fff;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #3e8e41;
+}
+
+.password-container {
+	margin-top: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+#password {
+	width: 100%;
+	height: 30px;
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px
+}
+
+#copy {
+	background-color: #4CAF50;
+	color: #fff;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+    margin-top: 10px;
+}
+
+#copy:hover {
+	background-color: #3e8e41;
+}
+
+.secret-button {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	cursor: pointer;
+}
+
+.secret-button svg {
+	fill: #4CAF50;
+}
