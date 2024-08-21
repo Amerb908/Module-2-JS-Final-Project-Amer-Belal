@@ -1,45 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Password Generator</title>
-	<link rel="stylesheet" href="css/styles.css">
+  <title>Chessboard.js Example</title>
+  <link rel="stylesheet" href="css/chessboard.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-	<div class="container">
-		<div class="history-button">
-            <button id="history-btn">History</button>
-        </div>
-        <div class="secret-button" id="secret-button">
-            <svg width="24" height="24" viewBox="0 0 24 24">
-                <path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 14c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
-            </svg>
-        </div>
-		<h1>Password Generator</h1>
-		<div class="options">
-			<label for="length">- Length:</label>
-			<input type="number" id="length" value="12" min="8" max="128"><br>
-			<label for="uppercase">- Uppercase:</label>
-			<input type="checkbox" id="uppercase"><br>
-			<label for="numbers">- Numbers:</label>
-			<input type="checkbox" id="numbers" ><br>
-			<label for="special">- Special Characters:</label>
-			<input type="checkbox" id="special" ><br>
-            <label for="greek">- Greek Words:</label>
-            <input type="checkbox" id="greek"><br>
-		</div>
-		<button id="generate">Generate Password</button>
-		<div class="password-container">
-			<input type="text" id="password" readonly>
-			<button id="copy">Copy</button>
-			<button id="save">Save Password</button>
-		</div>
-        <div class="strength-meter">
-            <div id="strength-bar"></div>
-            <p id="strength-text"></p>
-            
-        </div>
-        
-	</div>
-	<script src="js/script.js"></script>
+  <div id="chessboard" style="width: 400px;"></div>
+  <script src="js/chessboard.js"></script>
+  <script src="js/chess.js"></script> <!-- Include the chess.js library -->
+  <script type='module'src="js/script.js"></script> <!-- Include the script.js file -->
 </body>
 </html>
