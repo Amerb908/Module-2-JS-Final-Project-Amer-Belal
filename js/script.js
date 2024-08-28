@@ -56,7 +56,7 @@ class ChessGame {
 
     // AI logic: Get the best move using Minimax algorithm with Alpha-Beta pruning
     makeAIMove() {
-        const bestMove = this.getBestMove(2); // Set depth to 3 for AI search
+        const bestMove = this.getBestMove(3); // Set depth to 3 for AI search
         if (bestMove) {
             this.chess.move(bestMove);
             this.updateBoard();
@@ -125,11 +125,25 @@ class ChessGame {
         const board = this.chess.board();
         let totalEvaluation = 0;
 
+        // Material value
         for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 8; col++) {
                 totalEvaluation += this.getPieceValue(board[row][col]);
             }
         }
+
+        // Piece development
+        totalEvaluation += this.getPieceDevelopmentValue(board);
+
+        // Control of the center
+        totalEvaluation += this.getCenterControlValue(board);
+
+        // Pawn structure
+        totalEvaluation += this.getPawnStructureValue(board);
+
+        // King safety
+        totalEvaluation += this.getKingSafetyValue(board);
+
         return totalEvaluation;
     }
 
@@ -139,14 +153,125 @@ class ChessGame {
         }
         const pieceValues = {
             'p': 100, // Pawn
-            'r': 280, // Rook
+            'r': 500, // Rook
             'n': 320, // Knight
-            'b': 479, // Bishop
-            'q': 929, // Queen
-            'k': 600000 // King
+            'b': 330, // Bishop
+            'q': 900, // Queen
+            'k': 10000 // King
         };
         const value = pieceValues[piece.type];
         return piece.color === 'w' ? value : -value;
+    }
+
+    getPieceDevelopmentValue(board) {
+        let developmentValue = 0;
+        for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+                const piece = board[row][col];
+                if (piece && piece.color === 'w') {
+                    developmentValue += this.getPieceDevelopmentScore(piece, row, col);
+                } else if (piece && piece.color === 'b') {
+                    developmentValue -= this.getPieceDevelopmentScore(piece, row, col);
+                }
+            }
+        }
+        return developmentValue;
+    }
+
+    getPieceDevelopmentScore(piece, row, col) {
+        switch (piece.type) {
+            case 'p':
+                return 1 - Math.abs(row - 4);
+            case 'r':
+            case 'n':
+            case 'b':
+                return 1 - Math.abs(col - 4);
+            case 'q':
+                return 1;
+            default:
+                return 0;
+        }
+    }
+
+    getCenterControlValue(board) {
+        let centerControlValue = 0;
+        for (let row = 3; row <= 4; row++) {
+            for (let col = 3; col <= 4; col++) {
+                if (board[row] && board[row][col]) {
+                    const piece = board[row][col];
+                    if (piece && piece.color === 'w') {
+                        centerControlValue++;
+                    } else if (piece && piece.color === 'b') {
+                        centerControlValue--;
+                    }
+                }
+            }
+        }
+        return centerControlValue * 10;
+    }
+
+    getPawnStructureValue(board) {
+        let pawnStructureValue = 0;
+        for (let row = 0; row < 8; row++) {
+            let pawnChain = 0;
+            for (let col = 0; col < 8; col++) {
+                const piece = board[row][col];
+                if (piece && piece.type === 'p') {
+                    pawnChain++;
+                } else {
+                    pawnStructureValue += this.getPawnChainValue(pawnChain);
+                    pawnChain = 0;
+                }
+            }
+            pawnStructureValue += this.getPawnChainValue(pawnChain);
+        }
+        return pawnStructureValue;
+    }
+
+    getPawnChainValue(pawnChain) {
+        return pawnChain > 1 ? pawnChain * 10 : 0;
+    }
+
+    getKingSafetyValue(board) {
+        let kingSafetyValue = 0;
+        const kingPosition = this.findKingPosition(board, 'w');
+        if (kingPosition) {
+            kingSafetyValue += this.getKingSafetyScore(kingPosition, board);
+        }
+        const blackKingPosition = this.findKingPosition(board, 'b');
+        if (blackKingPosition) {
+            kingSafetyValue -= this.getKingSafetyScore(blackKingPosition, board);
+        }
+        return kingSafetyValue;
+    }
+
+    findKingPosition(board, color) {
+        for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+                const piece = board[row][col];
+                if (piece && piece.type === 'k' && piece.color === color) {
+                    return { row, col };
+                }
+            }
+        }
+        return null;
+    }
+
+    getKingSafetyScore(kingPosition, board) {
+        let kingSafetyScore = 0;
+        for (let row = -1; row <= 1; row++) {
+            for (let col = -1; col <= 1; col++) {
+                const newRow = kingPosition.row + row;
+                const newCol = kingPosition.col + col;
+                if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+                    const piece = board[newRow][newCol];
+                    if (piece && piece.color !== this.chess.turn()) {
+                        kingSafetyScore--;
+                    }
+                }
+            }
+        }
+        return kingSafetyScore;
     }
 }
 
