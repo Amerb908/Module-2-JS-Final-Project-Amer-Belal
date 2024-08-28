@@ -62,6 +62,7 @@ class ChessGame {
             this.updateBoard();
         } else {
             console.error('Best move is null');
+            alert('YOU HAVE WON THE GAME!!!');
         }
     }
 
