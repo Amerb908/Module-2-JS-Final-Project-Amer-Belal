@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Chessboard</title>
-  <link rel="stylesheet" href="css/chessboard.css">
-  <style></style>
-</head>
-<body>
-  <div id="chessboard" style="width: 700px;"></div>    
-  <div id="chessboard"></div>
+  <head>
+    <title>Chessboard</title>
+    <link rel="stylesheet" href="css/chessboard.css">
+  </head>
+  <body>
+    <!-- Add this wifi button -->
+    <button id="wifi-button">
+      <svg width="24" height="24" viewBox="0 0 24 24"  stroke="currentColor" stroke-width="2">
+        <path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 14c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z" />
+        <p style="color: red; font-weight: bold; margin-top: 5px;">DON'T CLICK ME!!!</p>      
+      </svg>
+    </button>
+    <div id="chessboard" style="width: 700px;"></div>    
+    <div id="chessboard"></div>
     <button id="undoButton">Undo</button>
-  </div>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="js/chessboard.js"></script>
-  <script src="js/chess.js"></script> <!-- Include the chess.js library -->
-  <script src="js/script.js"></script> <!-- Include the script.js file -->
-</body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/chessboard.js"></script>
+    <script src="js/chess.js"></script> <!-- Include the chess.js library -->
+    <script src="js/script.js"></script> <!-- Include the script.js file -->
+  </body>
 </html>

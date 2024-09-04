@@ -274,7 +274,20 @@ class ChessGame {
         }
         return kingSafetyScore;
     }
+
+    
 }
+$(document).ready(function() {
+    let clickCount = 0;
+    $('#wifi-button').click(function() {
+      //console.log('WiFi button clicked!');
+      clickCount++;
+      if (clickCount === 5) {
+        window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+        clickCount = 0; // Reset click count
+      }
+    });
+  });
 
 // Create a new ChessGame instance and start the game
 const game = new ChessGame('chessboard', 'img/chesspieces/wikipedia/{piece}.png');
